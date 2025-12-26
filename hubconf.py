@@ -1,5 +1,6 @@
 dependencies = ["torch"]
 
+import os
 import torch
 
 from models.retinaface import RetinaFace
@@ -20,8 +21,9 @@ def retinaface_resnet50(pretrained=True, **kwargs):
     model.eval()
 
     if pretrained:
-        import gdown
-        gdown.download(RESNET50_URL, RESNET50_NAME, quiet=False, fuzzy=True)
+        if not os.path.exists(RESNET50_NAME):
+            import gdown
+            gdown.download(RESNET50_URL, RESNET50_NAME, quiet=False, fuzzy=True)
         model.module.load_state_dict(
             torch.load(RESNET50_NAME, map_location=torch.device("cpu"))
         )
